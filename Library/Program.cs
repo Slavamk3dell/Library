@@ -74,6 +74,7 @@ namespace Library
                     Thread.Sleep(2000);
                     Console.ForegroundColor = ConsoleColor.White;
                     RemoveBook();
+                    return;
                 }
                 if (choiceOfBook < 1 || choiceOfBook > library.CountOfBooks())
                 {
