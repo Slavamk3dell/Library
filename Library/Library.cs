@@ -26,6 +26,9 @@ namespace Library
             while (true)
             {
                 WriteListOfBooksIfExisted();
+                if (!IsBooksPresent())
+                    break;
+                
                 Console.Write("\nВыберите книгу: ");
                 int indexOfBook;
                 try
