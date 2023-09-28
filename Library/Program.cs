@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace Library
 {
-    class Program
+    public class Program
     {
+        static Library library = new Library();
         static void Main()
         {
-            Library library = new();
-
             while (true)
             {
                 Console.WriteLine("\nLibrary Menu:");
@@ -20,67 +19,104 @@ namespace Library
 
                 string choice = Console.ReadLine();
 
-                switch (choice)
+                if (choice == "1")
                 {
-                    case "1":
-                        Console.Clear();
-                        Console.Write("Enter book title: ");
-                        string title = Console.ReadLine();
-                        Console.Write("Enter author name: ");
-                        string author = Console.ReadLine();
-                        Console.Write("Enter publication year: ");
-                        int year;
-                        try
-                        {
-                            year = int.Parse(Console.ReadLine());
-                        }
-                        catch (FormatException)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("ERROR 404");
-                            Console.WriteLine("Нужно вводить число!!!");
-                            Thread.Sleep(2000);
-                            Console.ForegroundColor = ConsoleColor.White;
-                            goto case "1";
-                        }
-                        Console.Write("Enter book text: ");
-                        string text = Console.ReadLine();
+                    AddBook();
+                }
 
-                        Console.Clear();
+                else if (choice == "2")
+                {
+                    RemoveBook();
+                }
 
-                        Book newBook = new(title, author, year, text);
-                        library.AddBook(newBook);
-                        break;
+                else if (choice == "3")
+                {
+                    DisplayBooks();
+                }
 
-                    case "2":
-                        Console.Clear();
-                        library.WriteListOfBooksIfExisted();
-                        if (library.IsBooksPresent())
-                        {
-                            Console.Write("Enter number of the book to remove: ");
-                            string choiceOfBook = Console.ReadLine();
-                            Console.Clear();
-                            library.RemoveBook(choiceOfBook);
-                        }
-                        break;
+                else if (choice == "4")
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Спасибо за пользование этой программы!!!");
+                    Environment.Exit(0); 
+                }
 
-                    case "3":
-                        Console.Clear();
-                        library.DisplayBooks();
-                        break;
-
-                    case "4":
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Спасибо за пользование этой говносистемой");
-                        Environment.Exit(0);
-                        break;
-
-                    default:
-                        Console.Clear();
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid choice. Please try again."); 
                 }
             }
+        }
+
+        public static void DisplayBooks()
+        {
+            Console.Clear();
+            library.DisplayBooks();
+        }
+
+        public static void RemoveBook()
+        {
+            Console.Clear();
+            library.WriteListOfBooksIfExisted();
+            if (library.IsBooksPresent())
+            {
+                Console.Write("Enter number of the book to remove: ");
+                int choiceOfBook = 0;
+                try
+                {
+                    choiceOfBook = int.Parse(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Неверный ввод. Повторите попытку!!!");
+                    Thread.Sleep(2000);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    RemoveBook();
+                }
+                if (choiceOfBook < 1 || choiceOfBook > library.CountOfBooks())
+                {
+                    Console.WriteLine("Неверный номер книги. Повторите попытку!!!");
+                    Thread.Sleep(2000);
+                    RemoveBook();
+                    return;
+                }
+                Console.Clear();
+                library.RemoveBook(choiceOfBook);
+            }
+        }
+
+        public static void AddBook()
+        {
+            Console.Clear();
+            Console.Write("Enter book title: ");
+            string title = Console.ReadLine();
+            Console.Write("Enter author name: ");
+            string author = Console.ReadLine();
+            Console.Write("Enter publication year: ");
+            int year = 0;
+            try
+            {
+                year = int.Parse(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("ERROR 404");
+                Console.WriteLine("Нужно вводить число!!!");
+                Thread.Sleep(2000);
+                Console.ForegroundColor = ConsoleColor.White;
+                AddBook();
+                return;
+            }
+            Console.Write("Enter book text: ");
+            string text = Console.ReadLine();
+
+            Console.Clear();
+
+            Book newBook = new(title, author, year, text);
+            library.AddBook(newBook);
         }
     }
 }

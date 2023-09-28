@@ -9,23 +9,16 @@ namespace Library
     public class Library
     {
         private readonly List<Book> books = new();
-
         public void AddBook(Book book)
         {
             books.Add(book);
             Console.WriteLine($"Added book: {book}");
         }
 
-        public void RemoveBook(string indexOfBook)
+        public void RemoveBook(int indexOfBook)
         {
-            Book bookToRemove = books.Find(b => b.Title.Equals(indexOfBook, StringComparison.OrdinalIgnoreCase));
-            if (bookToRemove != null)
-            {
-                books.Remove(bookToRemove);
-                Console.WriteLine($"Removed book: {bookToRemove}");
-            }
-            else
-                Console.WriteLine($"Book '{indexOfBook}' not found.");
+            Console.WriteLine($"Removed book: {books[indexOfBook - 1]}");
+            books.RemoveAt(indexOfBook - 1);
         }
 
         public void DisplayBooks()
@@ -80,6 +73,11 @@ namespace Library
         public bool IsBooksPresent()
         {
             return books.Count != 0;
+        }
+
+        public int CountOfBooks()
+        {
+            return books.Count;
         }
     }
 }
