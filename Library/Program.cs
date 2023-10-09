@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LibraryNameSpace;
 
 namespace Library
 {
     public class Program
     {
-        static Library library = new Library();
-        static void Main()
+        private static readonly LibraryNameSpace.Library Library = new();
+
+        private static void Main()
         {
             while (true)
             {
@@ -17,34 +17,28 @@ namespace Library
                 Console.WriteLine("4. Exit");
                 Console.Write("Enter your choice: ");
 
-                string choice = Console.ReadLine();
+                var choice = Console.ReadLine();
 
-                if (choice == "1")
+                switch (choice)
                 {
-                    AddBook();
-                }
-
-                else if (choice == "2")
-                {
-                    RemoveBook();
-                }
-
-                else if (choice == "3")
-                {
-                    DisplayBooks();
-                }
-
-                else if (choice == "4")
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("Спасибо за пользование этой программы!!!");
-                    Environment.Exit(0); 
-                }
-
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Invalid choice. Please try again."); 
+                    case "1":
+                        AddBook();
+                        break;
+                    case "2":
+                        RemoveBook();
+                        break;
+                    case "3":
+                        DisplayBooks();
+                        break;
+                    case "4":
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Спасибо за пользование этой программы!!!");
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
                 }
             }
         }
@@ -52,54 +46,65 @@ namespace Library
         public static void DisplayBooks()
         {
             Console.Clear();
-            library.DisplayBooks();
+            Library.DisplayBooks();
         }
 
         public static void RemoveBook()
         {
-            Console.Clear();
-            library.WriteListOfBooksIfExisted();
-            if (library.IsBooksPresent())
+            while (true)
             {
-                Console.Write("Enter number of the book to remove: ");
-                int choiceOfBook = 0;
-                try
-                {
-                    choiceOfBook = int.Parse(Console.ReadLine());
-                }
-                catch (FormatException)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Неверный ввод. Повторите попытку!!!");
-                    Thread.Sleep(2000);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    RemoveBook();
-                    return;
-                }
-                if (choiceOfBook < 1 || choiceOfBook > library.CountOfBooks())
-                {
-                    Console.WriteLine("Неверный номер книги. Повторите попытку!!!");
-                    Thread.Sleep(2000);
-                    RemoveBook();
-                    return;
-                }
+                var choice = 0;
                 Console.Clear();
-                library.RemoveBook(choiceOfBook);
+                Library.WriteListOfBooksIfExisted();
+                if (!Library.IsBooksPresent()) return;
+                Console.Write("Enter number of the book to remove: ");
+                var choiceOfBook = Console.ReadLine() ?? "1";
+                if (IsInt32(choiceOfBook))
+                {
+                    choice = int.Parse(choiceOfBook);
+                    if (choice < 1 || choice > Library.CountOfBooks())
+                    {
+                        PrintMessageAboutOutOfRange();
+                        continue;
+                    }
+                }
+                else
+                {
+                    PrintMessageAboutIntError();
+                    continue;
+                }
+
+                Console.Clear();
+                Library.RemoveBook(choice);
+                break;
             }
+        }
+
+        private static void PrintMessageAboutOutOfRange()
+        {
+            Console.WriteLine("Неверный номер книги. Повторите попытку!!!");
+            Thread.Sleep(2000);
+        }
+        private static void PrintMessageAboutIntError()
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(@"Неверный ввод числа. Повторите попытку!!!");
+            Thread.Sleep(2000);
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void AddBook()
         {
             Console.Clear();
             Console.Write("Enter book title: ");
-            string title = Console.ReadLine();
+            var title = Console.ReadLine();
             Console.Write("Enter author name: ");
-            string author = Console.ReadLine();
+            var author = Console.ReadLine();
             Console.Write("Enter publication year: ");
-            int year = 0;
+            int year;
             try
             {
-                year = int.Parse(Console.ReadLine());
+                year = int.Parse(Console.ReadLine() ?? "2023");
             }
             catch (FormatException)
             {
@@ -112,12 +117,16 @@ namespace Library
                 return;
             }
             Console.Write("Enter book text: ");
-            string text = Console.ReadLine();
+            var text = Console.ReadLine();
 
             Console.Clear();
-
             Book newBook = new(title, author, year, text);
-            library.AddBook(newBook);
+            Library.AddBook(newBook);
+        }
+
+        private static bool IsInt32(string str)
+        {
+            return int.TryParse(str, out _);
         }
     }
 }

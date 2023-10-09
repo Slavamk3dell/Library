@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Library
+﻿namespace LibraryNameSpace
 {
     public class Book
     {
-        public string Title { get; private set; }
-        public string Author { get; private set; }
-        public int Year { get; private set; }
-        public string Text { get; private set; }
+        public string Title { get; }
+        public string Author { get; }
+        public int Year { get; }
+        public string Text { get; }
 
         public Book(string title, string author, int year, string text)
         {
@@ -29,18 +23,6 @@ namespace Library
         public void DisplayTextOfBook()
         {
             Console.WriteLine($"Text: {Text}");
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            if (obj is not Book another)
-                return false;
-
-            return another.Title == Title && another.Author == Author &&
-                another.Year == Year;
         }
     }
 }

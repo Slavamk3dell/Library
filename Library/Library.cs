@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Library
+﻿namespace LibraryNameSpace
 {
     public class Library
     {
-        private readonly List<Book> books = new();
+        private readonly List<Book> _books = new();
         public void AddBook(Book book)
         {
-            books.Add(book);
+            _books.Add(book);
             Console.WriteLine($"Added book: {book}");
         }
 
         public void RemoveBook(int indexOfBook)
         {
-            Console.WriteLine($"Removed book: {books[indexOfBook - 1]}");
-            books.RemoveAt(indexOfBook - 1);
+            Console.WriteLine($"Removed book: {_books[indexOfBook - 1]}");
+            _books.RemoveAt(indexOfBook - 1);
         }
 
         public void DisplayBooks()
@@ -47,7 +41,7 @@ namespace Library
                 {
                     Console.ForegroundColor = ConsoleColor.White;
                 }
-                if (indexOfBook > books.Count || indexOfBook < 1)
+                if (indexOfBook > _books.Count || indexOfBook < 1)
                 {
                     Console.WriteLine("Такой книги нет в списке!!!");
                     Thread.Sleep(2000);
@@ -55,7 +49,7 @@ namespace Library
                     continue;
                 }
 
-                books[indexOfBook - 1].DisplayTextOfBook();
+                _books[indexOfBook - 1].DisplayTextOfBook();
                 break;
 
             }
@@ -66,8 +60,8 @@ namespace Library
             if (IsBooksPresent())
             {
                 Console.WriteLine("Library Books:");
-                for (int i = 0; i < books.Count; i++)
-                    Console.WriteLine($"{i + 1}) {books[i]}");
+                for (var i = 0; i < _books.Count; i++)
+                    Console.WriteLine($"{i + 1}) {_books[i]}");
             }
             else
                 Console.WriteLine("В библиотеке нет книг");
@@ -75,12 +69,12 @@ namespace Library
 
         public bool IsBooksPresent()
         {
-            return books.Count != 0;
+            return _books.Count != 0;
         }
 
         public int CountOfBooks()
         {
-            return books.Count;
+            return _books.Count;
         }
     }
 }
