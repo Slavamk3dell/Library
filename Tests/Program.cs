@@ -8,34 +8,28 @@ namespace Tests
         private static string Author;
         private static int Year;
         private static string Text;
+        private static LibraryNameSpace.Library Library;
         private static void Main()
         {
-            var library = new LibraryNameSpace.Library();
+            Library = new LibraryNameSpace.Library();
+            int countOfBooksBefore = Library.CountOfBooks();
 
             // Положительный тест кейс
-            Console.WriteLine("Положительный тест кейс:");
-            if (TestCase())
-            {
-                Book newBook = new(Title, Author, Year, Text);
-                library.AddBook(newBook);
+            Console.WriteLine("Положительный тест кейс AddBook:");
+            if (ResultOfTestCase() && countOfBooksBefore < Library.CountOfBooks())
                 Console.WriteLine("Положительный тест кейс пройден успешно!!!\n");
-            }
             else
                 Console.WriteLine("Положительный тест кейс провален!!!\n");
 
             // Отрицательный тест кейс
-            Console.WriteLine("Отрицательный тест кейс:");
-            if (TestCase())
-            {
-                Book newBook = new(Title, Author, Year, Text);
-                library.AddBook(newBook);
+            Console.WriteLine("Отрицательный тест кейс AddBook:");
+            if (ResultOfTestCase() && countOfBooksBefore < Library.CountOfBooks())
                 Console.WriteLine("Отрицательный тест кейс пройден успешно!!!\n");
-            }
             else
                 Console.WriteLine("Отрицательный тест кейс провален!!!\n");
         }
 
-        private static bool TestCase()
+        private static bool ResultOfTestCase()
         {
             Console.Write("Enter book title: ");
             Title = Console.ReadLine();
@@ -53,6 +47,9 @@ namespace Tests
 
             Console.Write("Enter book text: ");
             Text = Console.ReadLine();
+
+            Book newBook = new(Title, Author, Year, Text);
+            Library.AddBook(newBook);
 
             Console.Clear();
             return true;
